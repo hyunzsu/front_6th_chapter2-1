@@ -86,12 +86,10 @@ function createOrderSummary() {
 }
 
 // DOM 요소 참조 설정
-function setupElementReferences(appState) {
-  appState.elements.stockInfo = document.getElementById('stock-status');
-  appState.elements.productSelect = document.getElementById('product-select');
-  appState.elements.addButton = document.getElementById('add-to-cart');
-  appState.elements.cartDisplay = document.getElementById('cart-items');
-  appState.elements.totalDisplay = document.getElementById('cart-total');
+import { initializeDOMReferences } from './dom-refs.js';
+
+function setupElementReferences() {
+  initializeDOMReferences();
 }
 
 // 헬프 매뉴얼 토글 버튼 생성
@@ -182,7 +180,7 @@ function createHelpOverlay() {
 }
 
 // 전체 DOM 구조 생성
-export function createDOMStructure(appState) {
+export function createDOMStructure() {
   const root = document.getElementById('app');
 
   // 헤더 생성
@@ -240,5 +238,5 @@ export function createDOMStructure(appState) {
   root.appendChild(helpOverlay);
 
   // DOM 요소 참조 설정
-  setupElementReferences(appState);
+  setupElementReferences();
 }
