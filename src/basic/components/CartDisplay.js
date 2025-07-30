@@ -1,10 +1,11 @@
-import { appState, getProductById } from '../core/state.js';
+import { getProductById } from '../core/state.js';
+import { getCartDisplayElement } from '../core/dom-refs.js';
 
 // ==================== 장바구니 표시 컴포넌트 ====================
 
 // 장바구니 아이템 렌더링
 export function renderCartItems(cartData) {
-  const cartDisplay = appState.elements.cartDisplay;
+  const cartDisplay = getCartDisplayElement();
   if (!cartDisplay) return;
 
   if (!cartData || cartData.length === 0) {
@@ -49,7 +50,7 @@ function createCartItemHTML(item, index, totalLength) {
 
 // 장바구니 이벤트 리스너 설정
 function setupCartEventListeners() {
-  const cartDisplay = appState.elements.cartDisplay;
+  const cartDisplay = getCartDisplayElement();
   if (!cartDisplay) return;
 
   // 수량 변경 버튼들

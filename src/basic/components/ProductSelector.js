@@ -1,10 +1,11 @@
-import { appState, getProducts } from '../core/state.js';
+import { getProducts } from '../core/state.js';
+import { getProductSelectElement, getStockInfoElement } from '../core/dom-refs.js';
 
 // ==================== 상품 선택 컴포넌트 ====================
 
 // 상품 선택 드롭다운 렌더링
 export function renderProductSelector() {
-  const productSelect = appState.elements.productSelect;
+  const productSelect = getProductSelectElement();
   if (!productSelect) return;
 
   // 기존 옵션들 제거
@@ -87,7 +88,7 @@ function createProductOption(item) {
 
 // 재고 상태 렌더링
 export function renderStockStatus(productId) {
-  const stockInfo = appState.elements.stockInfo;
+  const stockInfo = getStockInfoElement();
   if (!stockInfo) return;
 
   if (!productId) {

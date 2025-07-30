@@ -1,10 +1,10 @@
-import { appState } from '../core/state.js';
+import { getTotalDisplayElement } from '../core/dom-refs.js';
 
 // ==================== 주문 요약 컴포넌트 ====================
 
 // 주문 요약 렌더링
 export function renderOrderSummary(summaryData) {
-  const totalDisplay = appState.elements.totalDisplay;
+  const totalDisplay = getTotalDisplayElement();
   if (!totalDisplay) return;
 
   const {
