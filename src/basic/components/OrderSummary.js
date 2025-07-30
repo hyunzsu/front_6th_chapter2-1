@@ -64,3 +64,21 @@ function renderDiscountInfo(individualDiscountInfo, totalDiscountRate) {
 
   discountInfo.innerHTML = discountHTML;
 }
+
+// ==================== 포인트 렌더링 ====================
+export function renderLoyaltyPoints(finalPoints, pointsDetails) {
+  const loyaltyPointsElement = document.getElementById('loyalty-points');
+  
+  if (!loyaltyPointsElement) return;
+  
+  if (finalPoints > 0) {
+    loyaltyPointsElement.innerHTML = `
+      <div>적립 포인트: <span class="font-bold">${finalPoints}p</span></div>
+      <div class="text-2xs opacity-70 mt-1">${pointsDetails.join(', ')}</div>
+    `;
+    loyaltyPointsElement.style.display = 'block';
+  } else {
+    loyaltyPointsElement.textContent = '적립 포인트: 0p';
+    loyaltyPointsElement.style.display = 'block';
+  }
+}
