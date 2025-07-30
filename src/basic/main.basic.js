@@ -12,13 +12,32 @@ import {
   TUESDAY,
 } from './constants/index.js';
 
-import { appState, initializeAppData } from './core/state.js';
+import { initializeAppData } from './core/state.js';
 import { createDOMStructure } from './core/dom.js';
 import {
   renderProductSelector,
   renderOrderSummary,
   renderCartCount,
 } from './components/index.js';
+import {
+  getProducts,
+  getBonusPoints,
+  setBonusPoints,
+  getItemCount,
+  setItemCount,
+  getTotalAmount,
+  setTotalAmount,
+  getLastSelectedProductId,
+  setLastSelectedProductId,
+  getProductById,
+} from './core/business-state.js';
+import {
+  getStockInfoElement,
+  getProductSelectElement,
+  getAddButtonElement,
+  getCartDisplayElement,
+  getTotalDisplayElement,
+} from './core/dom-refs.js';
 
 // ==================== 메인 함수 시작 ====================
 function main() {
@@ -26,7 +45,7 @@ function main() {
   initializeAppData();
 
   // ---------------- DOM 구조 생성 ----------------
-  createDOMStructure(appState);
+  createDOMStructure();
 
   // ---------------- 초기화 완료 ----------------
   // 초기 재고 계산 (사용되지 않는 변수)
@@ -44,8 +63,8 @@ function main() {
   const lightningDelay = Math.random() * TIMER_DELAYS.LIGHTNING.DELAY_MAX;
   setTimeout(() => {
     setInterval(function () {
-      const luckyIdx = Math.floor(Math.random() * appState.products.length);
-      const luckyItem = appState.products[luckyIdx];
+      const luckyIdx = Math.floor(Math.random() * getProducts().length);
+      const luckyItem = getProducts()[luckyIdx];
 
       if (luckyItem.stock > 0 && !luckyItem.isOnSale) {
         luckyItem.price = Math.round(
@@ -67,18 +86,18 @@ function main() {
       // }
 
       // 마지막 선택 상품과 다른 상품 추천
-      if (appState.lastSelectedProductId) {
+      if (getLastSelectedProductId()) {
         let suggest = null;
 
         // 추천할 상품 찾기 (복잡한 중첩 조건)
-        for (let k = 0; k < appState.products.length; k++) {
-          if (appState.products[k].id !== appState.lastSelectedProductId) {
+        for (let k = 0; k < getProducts().length; k++) {
+          if (getProducts()[k].id !== getLastSelectedProductId()) {
             // 마지막 선택과 다른 상품
-            if (appState.products[k].stock > 0) {
+            if (getProducts()[k].stock > 0) {
               // 재고 있는 상품
-              if (!appState.products[k].isSuggestedSale) {
+              if (!getProducts()[k].isSuggestedSale) {
                 // 아직 추천할인 적용 안된 상품
-                suggest = appState.products[k];
+                suggest = getProducts()[k];
                 break;
               }
             }
@@ -114,12 +133,12 @@ function onUpdateSelectOptions() {
 
   // 전체 재고 계산 및 시각적 피드백
   let totalStock = 0;
-  for (let idx = 0; idx < appState.products.length; idx++) {
-    totalStock += appState.products[idx].stock;
+  for (let idx = 0; idx < getProducts().length; idx++) {
+    totalStock += getProducts()[idx].stock;
   }
 
   // 재고 부족 시 시각적 피드백
-  appState.elements.productSelect.style.borderColor =
+  getProductSelectElement().style.borderColor =
     totalStock < STOCK_THRESHOLDS.WARNING ? 'orange' : '';
 }
 
@@ -131,7 +150,7 @@ function calculateCartItemsSubtotalAndQuantity(cartItems) {
   const individualDiscountInfo = [];
 
   for (let i = 0; i < cartItems.length; i++) {
-    const product = findProductById(cartItems[i].id);
+    const product = getProductById(cartItems[i].id);
     if (!product) continue;
 
     const quantityElement = cartItems[i].querySelector('.quantity-number');
@@ -219,7 +238,7 @@ function applyBulkAndSpecialDiscounts(
 function buildLowStockWarningMessage() {
   const warningMessages = [];
 
-  for (const product of appState.products) {
+  for (const product of getProducts()) {
     if (product.stock < STOCK_THRESHOLDS.LOW) {
       if (product.stock > 0) {
         warningMessages.push(
@@ -273,11 +292,11 @@ function calculateTotalBonusPoints(finalAmount, totalQuantity, cartItems) {
 
 // ==================== 장바구니 계산 메인 함수 (오케스트레이터) ====================
 function handleCalculateCartStuff() {
-  const cartItems = appState.elements.cartDisplay.children;
+  const cartItems = getCartDisplayElement().children;
 
   // 1. 상태 초기화
-  appState.totalAmount = 0;
-  appState.itemCount = 0;
+  setTotalAmount(0);
+  setItemCount(0);
 
   // 2. 장바구니 아이템별 계산
   const cartSummary = calculateCartItemsSubtotalAndQuantity(cartItems);
@@ -293,8 +312,8 @@ function handleCalculateCartStuff() {
   const { finalAmount, totalDiscountRate, isTuesdayToday } = finalCalculation;
 
   // 4. 상태 업데이트
-  appState.totalAmount = finalAmount;
-  appState.itemCount = totalQuantity;
+  setTotalAmount(finalAmount);
+  setItemCount(totalQuantity);
 
   // 5. 렌더링 함수를 통한 UI 업데이트
   renderOrderSummary({
@@ -376,7 +395,7 @@ function renderOrderSummarySection(
 // ==================== UI 업데이트: 장바구니 아이템 요약 추가 ====================
 function addCartItemsSummaryToDisplay(cartItems, summaryElement) {
   for (let i = 0; i < cartItems.length; i++) {
-    const product = findProductById(cartItems[i].id);
+    const product = getProductById(cartItems[i].id);
     if (!product) continue;
 
     const quantityElement = cartItems[i].querySelector('.quantity-number');
@@ -410,7 +429,7 @@ function addDiscountInfoToDisplay(
   summaryElement
 ) {
   // 대량구매 할인 (30개 이상)
-  if (appState.itemCount >= QUANTITY_THRESHOLDS.BONUS_LARGE) {
+  if (getItemCount() >= QUANTITY_THRESHOLDS.BONUS_LARGE) {
     summaryElement.innerHTML += `
       <div class="flex justify-between text-sm tracking-wide text-green-400">
         <span class="text-xs">🎉 대량구매 할인 (30개 이상)</span>
@@ -430,7 +449,7 @@ function addDiscountInfoToDisplay(
   }
 
   // 화요일 할인
-  if (isTuesdayToday && appState.totalAmount > 0) {
+  if (isTuesdayToday && getTotalAmount() > 0) {
     summaryElement.innerHTML += `
       <div class="flex justify-between text-sm tracking-wide text-purple-400">
         <span class="text-xs">🌟 화요일 추가 할인</span>
@@ -453,7 +472,7 @@ function addShippingInfoToDisplay(summaryElement) {
 // ==================== UI 업데이트: 총액 표시 업데이트 ====================
 function updateCartTotalDisplay(finalAmount) {
   const totalDisplayElement =
-    appState.elements.totalDisplay.querySelector('.text-2xl');
+    getTotalDisplayElement().querySelector('.text-2xl');
   if (totalDisplayElement) {
     totalDisplayElement.textContent = formatRoundedPrice(finalAmount);
   }
@@ -470,7 +489,7 @@ function updateItemCountDisplay(totalQuantity) {
 // ==================== UI 업데이트: 재고 경고 메시지 표시 ====================
 function updateStockWarningDisplay() {
   const warningMessage = buildLowStockWarningMessage();
-  appState.elements.stockInfo.textContent = warningMessage;
+  getStockInfoElement().textContent = warningMessage;
 }
 
 // ==================== UI 업데이트: 총 할인율 정보 박스 ====================
@@ -478,8 +497,8 @@ function updateTotalDiscountInfoBox(totalDiscountRate, subtotal) {
   const discountInfoElement = document.getElementById('discount-info');
   discountInfoElement.innerHTML = '';
 
-  if (totalDiscountRate > 0 && appState.totalAmount > 0) {
-    const savedAmount = subtotal - appState.totalAmount;
+  if (totalDiscountRate > 0 && getTotalAmount() > 0) {
+    const savedAmount = subtotal - getTotalAmount();
     discountInfoElement.innerHTML = `
       <div class="bg-green-500/20 rounded-lg p-3">
         <div class="flex justify-between items-center mb-1">
@@ -496,7 +515,7 @@ function updateTotalDiscountInfoBox(totalDiscountRate, subtotal) {
 function updateTuesdaySpecialBanner(isTuesdayToday) {
   const tuesdaySpecialElement = document.getElementById('tuesday-special');
 
-  if (isTuesdayToday && appState.totalAmount > 0) {
+  if (isTuesdayToday && getTotalAmount() > 0) {
     tuesdaySpecialElement.classList.remove('hidden');
   } else {
     tuesdaySpecialElement.classList.add('hidden');
@@ -530,7 +549,7 @@ function checkCartProductTypes(cartItems) {
   };
 
   for (const cartItem of cartItems) {
-    const product = findProductById(cartItem.id);
+    const product = getProductById(cartItem.id);
     if (!product) continue;
 
     switch (product.id) {
@@ -612,7 +631,7 @@ function updateLoyaltyPointsDisplay(finalPoints, pointsDetails) {
 
 // ==================== 포인트 계산 메인 함수 (오케스트레이터) ====================
 function doRenderBonusPoints() {
-  const cartItems = appState.elements.cartDisplay.children;
+  const cartItems = getCartDisplayElement().children;
 
   // 빈 장바구니 체크
   if (cartItems.length === 0) {
@@ -621,7 +640,7 @@ function doRenderBonusPoints() {
   }
 
   // 1. 기본 포인트 계산
-  const basePoints = calculateBasePoints(appState.totalAmount);
+  const basePoints = calculateBasePoints(getTotalAmount());
   let finalPoints = basePoints;
   const pointsDetails = [];
 
@@ -643,22 +662,20 @@ function doRenderBonusPoints() {
   pointsDetails.push(...setBonusResult.bonusDetails);
 
   // 4. 수량별 보너스
-  const quantityBonusResult = calculateQuantityBonusPoints(appState.itemCount);
+  const quantityBonusResult = calculateQuantityBonusPoints(getItemCount());
   finalPoints += quantityBonusResult.bonusPoints;
   if (quantityBonusResult.bonusDetail) {
     pointsDetails.push(quantityBonusResult.bonusDetail);
   }
 
   // 5. 상태 업데이트 및 UI 표시
-  appState.bonusPoints = finalPoints;
+  setBonusPoints(finalPoints);
   updateLoyaltyPointsDisplay(finalPoints, pointsDetails);
 }
 
 // ==================== 유틸리티 함수들 ====================
 
-function findProductById(productId) {
-  return appState.products.find((product) => product.id === productId);
-}
+// findProductById function moved to business-state.js as getProductById
 
 // ==================== 가격 포맷팅 유틸리티 함수들 ====================
 function formatPrice(price) {
@@ -671,10 +688,10 @@ function formatRoundedPrice(price) {
 
 // ==================== 장바구니 가격 업데이트 함수 ====================
 function doUpdatePricesInCart() {
-  const cartItems = appState.elements.cartDisplay.children;
+  const cartItems = getCartDisplayElement().children;
   for (let i = 0; i < cartItems.length; i++) {
     const itemId = cartItems[i].id;
-    const product = findProductById(itemId);
+    const product = getProductById(itemId);
     if (!product) continue;
 
     const priceDiv = cartItems[i].querySelector('.text-lg');
@@ -723,9 +740,9 @@ function doUpdatePricesInCart() {
 main();
 
 // ==================== 이벤트 핸들러들 ====================
-appState.elements.addButton.addEventListener('click', function () {
-  const selItem = appState.elements.productSelect.value;
-  const itemToAdd = findProductById(selItem);
+getAddButtonElement().addEventListener('click', function () {
+  const selItem = getProductSelectElement().value;
+  const itemToAdd = getProductById(selItem);
 
   if (!itemToAdd) return;
   if (itemToAdd.stock <= 0) return;
@@ -773,22 +790,22 @@ appState.elements.addButton.addEventListener('click', function () {
       </div>
     `;
 
-    appState.elements.cartDisplay.appendChild(newItem);
+    getCartDisplayElement().appendChild(newItem);
     itemToAdd.stock--;
   }
 
   // UI 업데이트 및 마지막 선택 저장
   handleCalculateCartStuff();
-  appState.lastSelectedProductId = selItem;
+  setLastSelectedProductId(selItem);
 });
 
 // ---------------- 장바구니 클릭 이벤트 (수량 변경, 삭제) ----------------
-appState.elements.cartDisplay.addEventListener('click', function (event) {
+getCartDisplayElement().addEventListener('click', function (event) {
   const tgt = event.target;
 
   const prodId = tgt.dataset.productId;
   const itemElem = document.getElementById(prodId);
-  const product = findProductById(prodId);
+  const product = getProductById(prodId);
 
   if (!product) return; // 상품 없으면 즉시 종료
 
