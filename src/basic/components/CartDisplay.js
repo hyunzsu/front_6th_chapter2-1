@@ -1,29 +1,14 @@
-import { getProductById } from '../core/state.js';
-import { getCartDisplayElement } from '../core/dom-refs.js';
+// ==================== 장바구니 아이템 HTML 구조 ====================
 
-// ==================== 장바구니 표시 컴포넌트 ====================
-
-// 장바구니 아이템 렌더링
-export function renderCartItems(cartData) {
-  const cartDisplay = getCartDisplayElement();
-  if (!cartDisplay) return;
-
-  if (!cartData || cartData.length === 0) {
-    cartDisplay.innerHTML = '';
-    return;
-  }
-
-  cartDisplay.innerHTML = cartData
-    .map((item, index, array) => createCartItemHTML(item, index, array.length))
-    .join('');
-
-  // 이벤트 리스너 재설정
-  setupCartEventListeners();
-}
-
-// 개별 장바구니 아이템 HTML 생성
-function createCartItemHTML(item, index, totalLength) {
-  const product = getProductById(item.id);
+/**
+ * 개별 장바구니 아이템 HTML 구조 생성
+ * @param {Object} item - 장바구니 아이템 데이터 {id, quantity}
+ * @param {Object} product - 상품 데이터
+ * @param {number} index - 아이템 인덱스
+ * @param {number} totalLength - 전체 아이템 수
+ * @returns {string} HTML 문자열
+ */
+export function CartItem(item, product, index, totalLength) {
   if (!product) return '';
 
   const isFirst = index === 0;
@@ -46,40 +31,4 @@ function createCartItemHTML(item, index, totalLength) {
       </div>
     </div>
   `;
-}
-
-// 장바구니 이벤트 리스너 설정
-function setupCartEventListeners() {
-  const cartDisplay = getCartDisplayElement();
-  if (!cartDisplay) return;
-
-  // 수량 변경 버튼들
-  cartDisplay.querySelectorAll('.quantity-change').forEach((button) => {
-    button.addEventListener('click', (e) => {
-      const productId = e.target.dataset.productId;
-      const change = parseInt(e.target.dataset.change);
-      // 전역 함수 호출 (main.basic.js에 정의된 함수들)
-      if (window.handleQuantityChange) {
-        window.handleQuantityChange(productId, change);
-      }
-    });
-  });
-
-  // 제거 버튼들
-  cartDisplay.querySelectorAll('.remove-item').forEach((button) => {
-    button.addEventListener('click', (e) => {
-      const productId = e.target.dataset.productId;
-      if (window.handleRemoveItem) {
-        window.handleRemoveItem(productId);
-      }
-    });
-  });
-}
-
-// 장바구니 수량 표시 렌더링
-export function renderCartCount(itemCount) {
-  const itemCountElement = document.getElementById('item-count');
-  if (itemCountElement) {
-    itemCountElement.textContent = `🛍️ ${itemCount} items in cart`;
-  }
 }
