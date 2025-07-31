@@ -32,6 +32,7 @@ export function updateCartDisplay() {
   // 3. 장바구니 전체 계산
   const cartResult = CartService.calculateCart(cartData, getProductById);
   const {
+    subtotal,
     finalAmount,
     totalQuantity,
     totalDiscountRate,
@@ -46,6 +47,9 @@ export function updateCartDisplay() {
   // 5. UI 렌더링
   CartRenderer.renderOrderSummary({
     finalAmount,
+    subtotal,
+    cartData,
+    totalQuantity,
     totalDiscountRate,
     isTuesdayToday,
     individualDiscountInfo,
@@ -81,11 +85,13 @@ function updateBonusPoints() {
     return;
   }
 
-  // 포인트 계산 (서비스 함수 사용)
+  const cartData = CartService.extractCartData(cartItems);
+
+  // 포인트 계산
   const pointsResult = calculateTotalPoints(
     getTotalAmount(),
     getItemCount(),
-    cartItems,
+    cartData,
     getProductById
   );
   const { finalPoints, pointsDetails } = pointsResult;

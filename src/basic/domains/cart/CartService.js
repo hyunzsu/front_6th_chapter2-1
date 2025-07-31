@@ -25,7 +25,7 @@ export function calculateCartSummary(cartData, getProductById) {
     totalQuantity += quantity;
     subtotal += itemSubtotal;
 
-    // 개별 상품 할인 계산 (추후 DiscountService에서 import)
+    // 개별 상품 할인 계산
     const discountRate = getProductDiscount(product.id, quantity);
     if (discountRate > 0) {
       individualDiscountInfo.push({
@@ -58,7 +58,7 @@ export function calculateCart(cartData, getProductById) {
   const { subtotal, totalQuantity, discountedTotal, individualDiscountInfo } =
     cartSummary;
 
-  // 2. 대량구매 및 특별 할인 적용 (추후 OrderService에서 import)
+  // 2. 대량구매 및 특별 할인 적용
   const bulkDiscounts = applyBulkDiscounts(
     subtotal,
     discountedTotal,
