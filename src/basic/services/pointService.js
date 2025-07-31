@@ -128,7 +128,12 @@ export function calculateQuantityBonus(totalQuantity) {
  * @param {Function} getProductById - 상품 조회 함수
  * @returns {Object} { finalPoints, pointsDetails }
  */
-export function calculateTotalPoints(finalAmount, totalQuantity, cartItems, getProductById) {
+export function calculateTotalPoints(
+  finalAmount,
+  totalQuantity,
+  cartItems,
+  getProductById
+) {
   // 1. 기본 포인트 계산
   const basePoints = calculateBasePoints(finalAmount);
   let finalPoints = basePoints;

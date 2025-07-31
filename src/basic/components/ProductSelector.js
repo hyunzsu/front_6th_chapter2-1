@@ -1,5 +1,8 @@
 import { getProducts } from '../core/state.js';
-import { getProductSelectElement, getStockInfoElement } from '../core/dom-refs.js';
+import {
+  getProductSelectElement,
+  getStockInfoElement,
+} from '../core/dom-refs.js';
 
 // ==================== 상품 선택 컴포넌트 ====================
 

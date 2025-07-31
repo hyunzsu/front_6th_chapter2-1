@@ -13,7 +13,9 @@ export function buildLowStockWarning(products) {
   for (const product of products) {
     if (product.stock < STOCK_THRESHOLDS.LOW) {
       if (product.stock > 0) {
-        warningMessages.push(`${product.name}: 재고 부족 (${product.stock}개 남음)`);
+        warningMessages.push(
+          `${product.name}: 재고 부족 (${product.stock}개 남음)`
+        );
       } else {
         warningMessages.push(`${product.name}: 품절`);
       }
@@ -38,8 +40,8 @@ export function calculateTotalStock(products) {
  * @returns {Array} 재고 부족 상품 배열
  */
 export function getLowStockProducts(products) {
-  return products.filter(product => 
-    product.stock < STOCK_THRESHOLDS.LOW && product.stock > 0
+  return products.filter(
+    (product) => product.stock < STOCK_THRESHOLDS.LOW && product.stock > 0
   );
 }
 
@@ -49,7 +51,7 @@ export function getLowStockProducts(products) {
  * @returns {Array} 품절 상품 배열
  */
 export function getOutOfStockProducts(products) {
-  return products.filter(product => product.stock === 0);
+  return products.filter((product) => product.stock === 0);
 }
 
 /**
@@ -83,7 +85,7 @@ export function reduceStock(product, quantity) {
   if (!canReduceStock(product, quantity)) {
     return false;
   }
-  
+
   product.stock -= quantity;
   return true;
 }

@@ -93,7 +93,7 @@ export function getDiscountInfo(cartItems, getProductById) {
     const quantityElement = cartItems[i].querySelector('.quantity-number');
     const quantity = parseInt(quantityElement.textContent);
     const productId = cartItems[i].id;
-    
+
     const discountRate = getProductDiscount(productId, quantity);
     if (discountRate > 0) {
       const product = getProductById(productId);

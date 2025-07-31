@@ -68,9 +68,9 @@ function renderDiscountInfo(individualDiscountInfo, totalDiscountRate) {
 // ==================== 포인트 렌더링 ====================
 export function renderLoyaltyPoints(finalPoints, pointsDetails) {
   const loyaltyPointsElement = document.getElementById('loyalty-points');
-  
+
   if (!loyaltyPointsElement) return;
-  
+
   if (finalPoints > 0) {
     loyaltyPointsElement.innerHTML = `
       <div>적립 포인트: <span class="font-bold">${finalPoints}p</span></div>

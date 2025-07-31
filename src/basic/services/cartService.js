@@ -1,4 +1,8 @@
-import { getProductDiscount, applyBulkDiscounts, getDiscountInfo } from './discountService.js';
+import {
+  getProductDiscount,
+  applyBulkDiscounts,
+  getDiscountInfo,
+} from './discountService.js';
 
 // ==================== 장바구니 계산 서비스 ====================
 
@@ -55,10 +59,15 @@ export function calculateCartSummary(cartItems, getProductById) {
 export function calculateCart(cartItems, getProductById) {
   // 1. 장바구니 아이템별 계산
   const cartSummary = calculateCartSummary(cartItems, getProductById);
-  const { subtotal, totalQuantity, discountedTotal, individualDiscountInfo } = cartSummary;
+  const { subtotal, totalQuantity, discountedTotal, individualDiscountInfo } =
+    cartSummary;
 
   // 2. 대량구매 및 특별 할인 적용
-  const bulkDiscounts = applyBulkDiscounts(subtotal, discountedTotal, totalQuantity);
+  const bulkDiscounts = applyBulkDiscounts(
+    subtotal,
+    discountedTotal,
+    totalQuantity
+  );
   const { finalAmount, totalDiscountRate, isTuesdayToday } = bulkDiscounts;
 
   return {
