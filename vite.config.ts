@@ -13,4 +13,13 @@ export default defineConfig({
     loader: 'tsx',
     include: /src\/.*\.[tj]sx?$/,
   },
+  base: '/front_6th_chapter2-1/',
+  build: {
+    outDir: 'dist',
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: 'src/setupTests.js',
+  },
 });
