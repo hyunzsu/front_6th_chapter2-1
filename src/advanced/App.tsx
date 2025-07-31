@@ -46,9 +46,13 @@ function App() {
 
         <OrderSummary
           totalAmount={state.totalAmount}
+          subtotal={state.subtotal}
           bonusPoints={state.bonusPoints}
           discountInfo={state.discountInfo}
           isTuesdaySpecial={state.isTuesdaySpecial}
+          cartItems={state.cartItems}
+          totalQuantity={state.itemCount}
+          getProductById={getProductById}
         />
       </MainGrid>
 

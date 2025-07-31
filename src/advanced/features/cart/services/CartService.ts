@@ -3,6 +3,7 @@ import type {
   Product,
   CartSummary,
   CartCalculation,
+  DiscountInfo,
 } from '../../../shared/types';
 import {
   getProductDiscount,
@@ -16,7 +17,7 @@ export function calculateCartSummary(
   let subtotal = 0;
   let totalQuantity = 0;
   let discountedTotal = 0;
-  const individualDiscountInfo = [];
+  const individualDiscountInfo: DiscountInfo[] = [];
 
   for (const item of cartItems) {
     const product = getProductById(item.id);

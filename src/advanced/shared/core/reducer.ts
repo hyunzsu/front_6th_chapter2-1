@@ -1,5 +1,6 @@
 import type { AppState, AppAction } from '../types';
 import { calculateCart } from '../../features/cart/services/CartService';
+import { calculateTotalPoints } from '../../features/order/services/PointService';
 import { DISCOUNT_RATES } from '../constants';
 
 export function shoppingReducer(state: AppState, action: AppAction): AppState {
@@ -193,6 +194,7 @@ function recalculateState(state: AppState): AppState {
       ...state,
       itemCount: 0,
       totalAmount: 0,
+      subtotal: 0,
       bonusPoints: 0,
       discountInfo: [],
       isTuesdaySpecial: false,
@@ -200,13 +202,22 @@ function recalculateState(state: AppState): AppState {
   }
 
   const cartResult = calculateCart(state.cartItems, getProductById);
+  
+  // 포인트 계산
+  const pointsResult = calculateTotalPoints(
+    cartResult.finalAmount,
+    cartResult.totalQuantity,
+    state.cartItems,
+    getProductById
+  );
 
   return {
     ...state,
     itemCount: cartResult.totalQuantity,
     totalAmount: cartResult.finalAmount,
+    subtotal: cartResult.subtotal,
     discountInfo: cartResult.individualDiscountInfo,
     isTuesdaySpecial: cartResult.isTuesdayToday,
-    // TODO: bonusPoints 계산 추가
+    bonusPoints: pointsResult.finalPoints,
   };
 }

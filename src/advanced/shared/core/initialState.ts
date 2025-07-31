@@ -54,6 +54,7 @@ export const initialState: AppState = {
   bonusPoints: 0,
   itemCount: 0,
   totalAmount: 0,
+  subtotal: 0,
   lastSelectedProductId: null,
   discountInfo: [],
   isTuesdaySpecial: false,

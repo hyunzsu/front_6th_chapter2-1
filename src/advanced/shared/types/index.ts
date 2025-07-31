@@ -47,12 +47,13 @@ export interface AppState {
   bonusPoints: number;
   itemCount: number;
   totalAmount: number;
+  subtotal: number;
   lastSelectedProductId: string | null;
   discountInfo: DiscountInfo[];
   isTuesdaySpecial: boolean;
 }
 
-export type AppAction = 
+export type AppAction =
   | { type: 'SELECT_PRODUCT'; payload: string }
   | { type: 'ADD_TO_CART'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
