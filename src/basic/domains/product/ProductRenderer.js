@@ -5,8 +5,6 @@ import {
 import { ProductOption } from './components/ProductSelector.js';
 import { STOCK_THRESHOLDS } from '../../shared/constants/index.js';
 
-// ==================== 상품 순수 렌더링 ====================
-
 /**
  * 상품 선택 드롭다운 렌더링
  */

@@ -2,8 +2,6 @@ import { getProducts } from '../../shared/core/business-state.js';
 import { calculateTotalStock } from './StockService.js';
 import * as ProductRenderer from './ProductRenderer.js';
 
-// ==================== 상품 도메인 컨트롤러 ====================
-
 /**
  * 상품 선택 UI 업데이트 오케스트레이션
  */

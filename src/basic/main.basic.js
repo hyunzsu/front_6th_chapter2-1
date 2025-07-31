@@ -20,19 +20,18 @@ function main() {
   createDOMStructure();
 
   // 초기 UI 업데이트
-  ProductController.updateSelectOptions(); // 상품 목록
-  CartController.updateCartDisplay(); // 장바구니 계산
+  ProductController.updateSelectOptions();
+  CartController.updateCartDisplay();
 
   // 이벤트 핸들러 초기화
   initializeEvents();
 
   // 프로모션 시스템
-  // 번개세일
   LightningSaleService.startLightningSaleSystem(getProducts, () => {
     ProductController.updateSelectOptions();
     CartController.updateCartPrices();
   });
-  // 추천할인
+
   SuggestedSaleService.startSuggestedSaleSystem(
     getProducts,
     getLastSelectedProductId,

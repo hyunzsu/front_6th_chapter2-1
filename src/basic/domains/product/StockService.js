@@ -1,7 +1,5 @@
 import { STOCK_THRESHOLDS } from '../../shared/constants/index.js';
 
-// ==================== 상품 재고 관리 서비스 ====================
-
 /**
  * 재고 부족 경고 메시지 생성
  * @param {Array} products - 상품 목록
@@ -82,9 +80,7 @@ export function canReduceStock(product, requestedQuantity) {
  * @returns {boolean} 차감 성공 여부
  */
 export function reduceStock(product, quantity) {
-  if (!canReduceStock(product, quantity)) {
-    return false;
-  }
+  if (!canReduceStock(product, quantity)) return false;
 
   product.stock -= quantity;
   return true;

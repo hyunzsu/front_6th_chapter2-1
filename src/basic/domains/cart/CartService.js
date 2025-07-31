@@ -3,11 +3,9 @@ import {
   applyBulkDiscounts,
 } from '../order/DiscountService.js';
 
-// ==================== 장바구니 도메인 서비스 ====================
-
 /**
- * 장바구니 아이템별 소계 및 수량 계산 (순수한 비즈니스 로직)
- * @param {Array} cartData - 장바구니 데이터 [{id, quantity}]
+ * 장바구니 아이템별 소계 및 수량 계산
+ * @param {Array} cartData - 장바구니 데이터 [{id: 'p1', quantity: 2}]
  * @param {Function} getProductById - 상품 조회 함수
  * @returns {Object} { subtotal, totalQuantity, discountedTotal, individualDiscountInfo }
  */
@@ -49,8 +47,8 @@ export function calculateCartSummary(cartData, getProductById) {
 }
 
 /**
- * 장바구니 전체 계산 (메인 오케스트레이터)
- * @param {Array} cartData - 장바구니 데이터 [{id, quantity}]
+ * 장바구니 전체 계산
+ * @param {Array} cartData - 장바구니 데이터 [{id: 'p1', quantity: 2}]
  * @param {Function} getProductById - 상품 조회 함수
  * @returns {Object} 계산 결과 객체
  */
@@ -80,7 +78,7 @@ export function calculateCart(cartData, getProductById) {
 
 /**
  * 장바구니가 비어있는지 확인
- * @param {Array} cartData - 장바구니 데이터
+ * @param {Array} cartData - 장바구니 데이터 [{id: 'p1', quantity: 2}]
  * @returns {boolean} 비어있으면 true
  */
 export function isCartEmpty(cartData) {
@@ -90,7 +88,7 @@ export function isCartEmpty(cartData) {
 /**
  * DOM에서 장바구니 데이터 추출
  * @param {HTMLCollection} cartItems - DOM 장바구니 아이템들
- * @returns {Array} 장바구니 데이터 [{id, quantity}]
+ * @returns {Array} 장바구니 데이터 [{id: 'p1', quantity: 2}]
  */
 export function extractCartData(cartItems) {
   const cartData = [];

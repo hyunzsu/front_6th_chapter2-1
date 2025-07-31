@@ -7,7 +7,7 @@ import {
   MONITOR_ID,
 } from '../../shared/constants/index.js';
 
-// ==================== 주문 포인트 계산 서비스 ====================
+// ==================== 포인트 적립 규칙 ====================
 
 /**
  * 기본 포인트 계산 (1,000원당 1포인트)
@@ -38,7 +38,7 @@ export function applyTuesdayBonus(basePoints, isTuesday) {
 
 /**
  * 장바구니 상품 타입 확인
- * @param {Array} cartData - 장바구니 데이터 [{id, quantity}]
+ * @param {Array} cartData - 장바구니 데이터 [{id: 'p1', quantity: 2}]
  * @param {Function} getProductById - 상품 조회 함수
  * @returns {Object} { hasKeyboard, hasMouse, hasMonitor }
  */
@@ -124,7 +124,7 @@ export function calculateQuantityBonus(totalQuantity) {
  * 전체 포인트 계산 (메인 오케스트레이터)
  * @param {number} finalAmount - 최종 결제 금액
  * @param {number} totalQuantity - 총 수량
- * @param {Array} cartData - 장바구니 데이터 [{id, quantity}]
+ * @param {Array} cartData - 장바구니 데이터 [{id: 'p1', quantity: 2}]
  * @param {Function} getProductById - 상품 조회 함수
  * @returns {Object} { finalPoints, pointsDetails }
  */

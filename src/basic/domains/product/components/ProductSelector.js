@@ -1,7 +1,5 @@
-// ==================== 상품 옵션 HTML 구조 ====================
-
 /**
- * 개별 상품 옵션 HTML 구조 생성
+ * 상품 옵션 HTML 구조 생성
  * @param {Object} item - 상품 데이터
  * @returns {HTMLElement} option 요소
  */

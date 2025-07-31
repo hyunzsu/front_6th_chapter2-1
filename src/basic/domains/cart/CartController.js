@@ -16,8 +16,6 @@ import { buildLowStockWarning } from '../product/StockService.js';
 import * as CartService from './CartService.js';
 import * as CartRenderer from './CartRenderer.js';
 
-// ==================== 장바구니 도메인 컨트롤러 ====================
-
 /**
  * 장바구니 전체 업데이트 오케스트레이션
  */
@@ -31,7 +29,7 @@ export function updateCartDisplay() {
   // 2. DOM에서 장바구니 데이터 추출
   const cartData = CartService.extractCartData(cartItems);
 
-  // 3. 장바구니 전체 계산 (서비스 함수 사용)
+  // 3. 장바구니 전체 계산
   const cartResult = CartService.calculateCart(cartData, getProductById);
   const {
     finalAmount,
@@ -61,7 +59,7 @@ export function updateCartDisplay() {
 }
 
 /**
- * 재고 경고 업데이트
+ * 재고 경고 메시지
  */
 function updateStockWarning() {
   const warningMessage = buildLowStockWarning(getProducts());
@@ -72,7 +70,7 @@ function updateStockWarning() {
 }
 
 /**
- * 포인트 계산 및 표시 업데이트
+ * 포인트 계산 및 표시
  */
 function updateBonusPoints() {
   const cartItems = getCartDisplayElement().children;

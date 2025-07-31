@@ -9,8 +9,6 @@ import {
 import { CartItem } from './components/CartItem.js';
 import { formatRoundedPrice } from '../../shared/utils/formatters.js';
 
-// ==================== 장바구니 순수 렌더링 ====================
-
 /**
  * 장바구니 아이템들을 DOM에 렌더링
  */

@@ -9,7 +9,7 @@ import {
   SPEAKER_ID,
 } from '../../shared/constants/index.js';
 
-// ==================== 주문 할인 계산 서비스 ====================
+// ==================== 할인 규칙 ====================
 
 /**
  * 개별 상품 할인율 조회
@@ -34,7 +34,7 @@ export function getProductDiscount(productId, quantity) {
 }
 
 /**
- * 대량구매 및 화요일 할인 적용
+ * 대량구매 & 화요일 할인
  * @param {number} subtotal - 개별 할인 적용 전 소계
  * @param {number} discountedTotal - 개별 할인 적용 후 금액
  * @param {number} totalQuantity - 총 수량
