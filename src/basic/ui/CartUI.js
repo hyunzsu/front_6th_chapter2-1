@@ -21,7 +21,7 @@ import {
   calculateTotalPoints,
   buildLowStockWarning,
 } from '../services/index.js';
-import { CartItem } from '../components/CartDisplay.js';
+import { CartItem } from '../components/CartItem.js';
 import { formatRoundedPrice } from '../utils/formatters.js';
 
 // ==================== 장바구니 UI 관리 ====================

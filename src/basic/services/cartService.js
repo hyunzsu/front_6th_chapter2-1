@@ -1,8 +1,4 @@
-import {
-  getProductDiscount,
-  applyBulkDiscounts,
-  getDiscountInfo,
-} from './discountService.js';
+import { getProductDiscount, applyBulkDiscounts } from './discountService.js';
 
 // ==================== 장바구니 계산 서비스 ====================
 

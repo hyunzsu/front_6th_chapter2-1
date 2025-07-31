@@ -15,4 +15,4 @@ export { ProductOption } from './ProductSelector.js';
 
 // 장바구니 관련 컴포넌트들
 export { CartContainer } from './CartContainer.js';
-export { CartItem } from './CartDisplay.js';
+export { CartItem } from './CartItem.js';

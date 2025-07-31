@@ -1,11 +1,7 @@
-// ==================== 도움말 매뉴얼 컴포넌트 ====================
-
-/**
- * 헬프 매뉴얼 토글 버튼 생성
- * @returns {HTMLElement} 토글 버튼 DOM 요소
- */
+/** 헬프 매뉴얼 토글 버튼 생성 */
 export function HelpToggleButton() {
   const manualToggle = document.createElement('button');
+  manualToggle.id = 'help-toggle';
   manualToggle.className =
     'fixed top-4 right-4 bg-black text-white p-3 rounded-full hover:bg-gray-900 transition-colors z-50';
   manualToggle.innerHTML = `
@@ -16,16 +12,15 @@ export function HelpToggleButton() {
   return manualToggle;
 }
 
-/**
- * 헬프 매뉴얼 오버레이 생성
- * @returns {Object} { overlay, column } - 오버레이와 컬럼 DOM 요소
- */
+/** 헬프 매뉴얼 오버레이 생성 */
 export function HelpManualOverlay() {
   const manualOverlay = document.createElement('div');
+  manualOverlay.id = 'help-overlay';
   manualOverlay.className =
     'fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300';
 
   const manualColumn = document.createElement('div');
+  manualColumn.id = 'help-column';
   manualColumn.className =
     'fixed right-0 top-0 h-full w-80 bg-white shadow-2xl p-6 overflow-y-auto z-50 transform translate-x-full transition-transform duration-300';
   manualColumn.innerHTML = `

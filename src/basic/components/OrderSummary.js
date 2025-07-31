@@ -1,5 +1,3 @@
-// ==================== 주문 요약 HTML 구조 ====================
-
 /** 주문 요약 패널 DOM 생성 */
 export function OrderSummary() {
   const rightColumn = document.createElement('section');

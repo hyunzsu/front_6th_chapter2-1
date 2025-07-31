@@ -6,16 +6,16 @@ import {
   SPEAKER_ID,
 } from '../constants/index.js';
 
-// ==================== 순수 비즈니스 상태 (React useState 패턴) ====================
+/** 비즈니스 상태 저장소 */
 export const businessState = {
-  products: [], // 상품 목록 배열
-  bonusPoints: 0, // 적립 포인트
-  itemCount: 0, // 장바구니 총 수량
-  totalAmount: 0, // 총 금액
-  lastSelectedProductId: null, // 마지막 선택 상품 ID
+  products: [],
+  bonusPoints: 0,
+  itemCount: 0,
+  totalAmount: 0,
+  lastSelectedProductId: null,
 };
 
-// ==================== 상품 데이터 초기화 ====================
+/** 상품 데이터 초기화 */
 function initializeProductData() {
   return [
     {
@@ -66,7 +66,7 @@ function initializeProductData() {
   ];
 }
 
-// ==================== 비즈니스 상태 초기화 ====================
+/** 비즈니스 상태 초기화 */
 export function initializeBusinessState() {
   businessState.totalAmount = 0;
   businessState.itemCount = 0;
@@ -75,7 +75,7 @@ export function initializeBusinessState() {
   businessState.products = initializeProductData();
 }
 
-// ==================== 상태 접근자 함수들 ====================
+/** 상태 접근자 함수들 */
 export function getProducts() {
   return businessState.products;
 }
