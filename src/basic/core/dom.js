@@ -11,7 +11,6 @@ import {
 } from '../components/HelpManual.js';
 import { OrderSummary } from '../components/OrderSummary.js';
 import { initializeDOMReferences } from './dom-refs.js';
-import { setupHelpManualEvents } from './events.js';
 
 // 전체 DOM 구조 생성
 export function createDOMStructure() {
@@ -28,7 +27,7 @@ export function createDOMStructure() {
   const cartContainer = CartContainer();
   const rightColumn = OrderSummary();
   const helpToggle = HelpToggleButton();
-  const { overlay: helpOverlay, column: helpColumn } = HelpManualOverlay();
+  const { overlay: helpOverlay } = HelpManualOverlay();
 
   // ProductPanel에 하위 컴포넌트들 조립
   productPanel.appendChild(productSelect);
@@ -51,7 +50,4 @@ export function createDOMStructure() {
 
   // DOM 요소 참조 설정
   initializeDOMReferences();
-
-  // 헬프 매뉴얼 이벤트 핸들러 설정
-  setupHelpManualEvents(helpToggle, helpOverlay, helpColumn);
 }
