@@ -1,6 +1,6 @@
-import { STOCK_THRESHOLDS } from '../constants/index.js';
+import { STOCK_THRESHOLDS } from '../../shared/constants/index.js';
 
-// ==================== 재고 관리 서비스 ====================
+// ==================== 상품 재고 관리 서비스 ====================
 
 /**
  * 재고 부족 경고 메시지 생성

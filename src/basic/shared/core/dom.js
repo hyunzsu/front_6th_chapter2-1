@@ -1,15 +1,20 @@
-import { Header } from '../components/Header.js';
-import { ProductPanel } from '../components/ProductPanel.js';
-import { ProductSelect } from '../components/ProductSelect.js';
-import { AddToCartButton } from '../components/AddToCartButton.js';
-import { StockInfo } from '../components/StockInfo.js';
-import { CartContainer } from '../components/CartContainer.js';
-import { MainGrid, LeftColumn } from '../components/Layout.js';
 import {
+  Header,
+  MainGrid,
+  LeftColumn,
   HelpToggleButton,
   HelpManualOverlay,
-} from '../components/HelpManual.js';
-import { OrderSummary } from '../components/OrderSummary.js';
+} from '../components/index.js';
+import {
+  ProductPanel,
+  ProductSelect,
+  AddToCartButton,
+  StockInfo,
+} from '../../domains/product/components/index.js';
+import {
+  CartContainer,
+  OrderSummary,
+} from '../../domains/cart/components/index.js';
 import { initializeDOMReferences } from './dom-refs.js';
 
 // 전체 DOM 구조 생성

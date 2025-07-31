@@ -1,5 +1,3 @@
-// ==================== 기존 appState를 새로운 모듈들로 분리 ====================
-
 // 비즈니스 상태는 business-state.js로 이동
 export {
   initializeBusinessState as initializeAppData,

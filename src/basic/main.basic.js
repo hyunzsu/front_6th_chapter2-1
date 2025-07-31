@@ -1,19 +1,16 @@
-import { initializeAppData } from './core/state.js';
-import { createDOMStructure } from './core/dom.js';
-import { initializeEvents } from './core/events.js';
-import {
-  updateSelectOptions,
-  updateCartDisplay,
-  updateCartPrices,
-} from './ui/index.js';
+import { initializeAppData } from './shared/core/state.js';
+import { createDOMStructure } from './shared/core/dom.js';
+import { initializeEvents } from './shared/core/events.js';
 import {
   getProducts,
   getLastSelectedProductId,
-} from './core/business-state.js';
+} from './shared/core/business-state.js';
 import {
-  startLightningSaleSystem,
-  startSuggestSaleSystem,
-} from './services/index.js';
+  CartController,
+  ProductController,
+  LightningSaleService,
+  SuggestedSaleService,
+} from './domains/index.js';
 
 function main() {
   // 앱 데이터 초기화
@@ -23,23 +20,27 @@ function main() {
   createDOMStructure();
 
   // 초기 UI 업데이트
-  updateSelectOptions(); // 상품 목록
-  updateCartDisplay(); // 장바구니 계산
+  ProductController.updateSelectOptions(); // 상품 목록
+  CartController.updateCartDisplay(); // 장바구니 계산
 
   // 이벤트 핸들러 초기화
   initializeEvents();
 
-  // 이벤트 시스템
+  // 프로모션 시스템
   // 번개세일
-  startLightningSaleSystem(getProducts, () => {
-    updateSelectOptions();
-    updateCartPrices();
+  LightningSaleService.startLightningSaleSystem(getProducts, () => {
+    ProductController.updateSelectOptions();
+    CartController.updateCartPrices();
   });
   // 추천할인
-  startSuggestSaleSystem(getProducts, getLastSelectedProductId, () => {
-    updateSelectOptions();
-    updateCartPrices();
-  });
+  SuggestedSaleService.startSuggestedSaleSystem(
+    getProducts,
+    getLastSelectedProductId,
+    () => {
+      ProductController.updateSelectOptions();
+      CartController.updateCartPrices();
+    }
+  );
 }
 
 main();

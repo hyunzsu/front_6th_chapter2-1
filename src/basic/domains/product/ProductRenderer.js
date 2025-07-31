@@ -1,18 +1,16 @@
-import { getProducts } from '../core/business-state.js';
 import {
   getProductSelectElement,
   getStockInfoElement,
-} from '../core/dom-refs.js';
-import { ProductOption } from '../components/ProductSelector.js';
-import { STOCK_THRESHOLDS } from '../constants/index.js';
-import { calculateTotalStock } from '../services/index.js';
+} from '../../shared/core/dom-refs.js';
+import { ProductOption } from './components/ProductSelector.js';
+import { STOCK_THRESHOLDS } from '../../shared/constants/index.js';
 
-// ==================== 상품 UI 관리 ====================
+// ==================== 상품 순수 렌더링 ====================
 
 /**
  * 상품 선택 드롭다운 렌더링
  */
-export function renderProductSelector() {
+export function renderProductSelector(products) {
   const productSelect = getProductSelectElement();
   if (!productSelect) return;
 
@@ -20,7 +18,7 @@ export function renderProductSelector() {
   productSelect.innerHTML = '';
 
   // 상품 옵션들 추가
-  getProducts().forEach((product) => {
+  products.forEach((product) => {
     const option = ProductOption(product);
     productSelect.appendChild(option);
   });
@@ -29,17 +27,14 @@ export function renderProductSelector() {
 /**
  * 재고 상태 렌더링
  */
-export function renderStockStatus(productId) {
+export function renderStockStatus(product) {
   const stockInfo = getStockInfoElement();
   if (!stockInfo) return;
 
-  if (!productId) {
+  if (!product) {
     stockInfo.textContent = '';
     return;
   }
-
-  const product = getProducts().find((p) => p.id === productId);
-  if (!product) return;
 
   if (product.stock === 0) {
     stockInfo.textContent = '재고가 부족합니다.';
@@ -54,15 +49,13 @@ export function renderStockStatus(productId) {
 }
 
 /**
- * 드롭다운 옵션 업데이트 (렌더링 + 스타일링)
+ * 드롭다운 시각적 피드백 업데이트
  */
-export function updateSelectOptions() {
-  renderProductSelector();
-
-  // 전체 재고 계산 및 시각적 피드백
-  const totalStock = calculateTotalStock(getProducts());
+export function updateSelectVisualFeedback(totalStock) {
+  const productSelect = getProductSelectElement();
+  if (!productSelect) return;
 
   // 재고 부족 시 시각적 피드백
-  getProductSelectElement().style.borderColor =
+  productSelect.style.borderColor =
     totalStock < STOCK_THRESHOLDS.WARNING ? 'orange' : '';
 }

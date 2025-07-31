@@ -7,8 +7,8 @@ import {
   getHelpOverlayElement,
   getHelpColumnElement,
 } from './dom-refs.js';
-import { updateCartDisplay, updateSelectOptions } from '../ui/index.js';
-import { CartItem } from '../components/CartItem.js';
+import { CartController, ProductController } from '../../domains/index.js';
+import { CartItem } from '../../domains/cart/components/CartItem.js';
 import { DEFAULT_MESSAGES } from '../constants/index.js';
 
 // ==================== 이벤트 핸들러 초기화 ====================
@@ -63,7 +63,7 @@ function setupAddButtonHandler() {
       addNewItemToCart(itemToAdd);
     }
 
-    updateCartDisplay();
+    CartController.updateCartDisplay();
     setLastSelectedProductId(selItem);
   });
 }
@@ -154,6 +154,6 @@ function handleItemRemove(prodId) {
 
 /** UI 새로고침 */
 function refreshCartUI() {
-  updateCartDisplay();
-  updateSelectOptions();
+  CartController.updateCartDisplay();
+  ProductController.updateSelectOptions();
 }
