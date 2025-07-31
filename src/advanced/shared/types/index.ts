@@ -40,13 +40,27 @@ export interface BulkDiscountResult {
   isTuesdayToday: boolean;
 }
 
-export interface BusinessState {
+export interface AppState {
   products: Product[];
+  cartItems: CartItem[];
+  selectedProductId: string;
   bonusPoints: number;
   itemCount: number;
   totalAmount: number;
   lastSelectedProductId: string | null;
+  discountInfo: DiscountInfo[];
+  isTuesdaySpecial: boolean;
 }
+
+export type AppAction = 
+  | { type: 'SELECT_PRODUCT'; payload: string }
+  | { type: 'ADD_TO_CART'; payload: string }
+  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'REMOVE_FROM_CART'; payload: string }
+  | { type: 'APPLY_LIGHTNING_SALE'; payload: string }
+  | { type: 'APPLY_SUGGESTED_SALE'; payload: string }
+  | { type: 'RESET_PROMOTIONS'; payload: string }
+  | { type: 'CALCULATE_TOTALS' };
 
 export interface StockStatus {
   isLow: boolean;
