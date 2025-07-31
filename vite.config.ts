@@ -13,9 +13,14 @@ export default defineConfig({
     loader: 'tsx',
     include: /src\/.*\.[tj]sx?$/,
   },
-  base: '/front_6th_chapter2-1/',
+  base: process.env.NODE_ENV === 'production' ? '/front_6th_chapter2-1/' : '/',
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+      },
+    },
   },
   test: {
     globals: true,
