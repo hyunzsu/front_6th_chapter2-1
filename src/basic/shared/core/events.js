@@ -7,8 +7,8 @@ import {
   getHelpOverlayElement,
   getHelpColumnElement,
 } from './dom-refs.js';
-import { CartController, ProductController } from '../../domains/index.js';
-import { CartItem } from '../../domains/cart/components/CartItem.js';
+import { CartController, ProductController } from '../../features/index.js';
+import { CartItem } from '../../features/cart/components/CartItem.js';
 import { DEFAULT_MESSAGES } from '../constants/index.js';
 
 // ==================== 이벤트 핸들러 초기화 ====================

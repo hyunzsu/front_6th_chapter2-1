@@ -10,7 +10,7 @@ import {
   ProductController,
   LightningSaleService,
   SuggestedSaleService,
-} from './domains/index.js';
+} from './features/index.js';
 
 function main() {
   // 앱 데이터 초기화

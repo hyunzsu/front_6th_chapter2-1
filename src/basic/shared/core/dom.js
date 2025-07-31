@@ -10,11 +10,11 @@ import {
   ProductSelect,
   AddToCartButton,
   StockInfo,
-} from '../../domains/product/components/index.js';
+} from '../../features/product/components/index.js';
 import {
   CartContainer,
   OrderSummary,
-} from '../../domains/cart/components/index.js';
+} from '../../features/cart/components/index.js';
 import { initializeDOMReferences } from './dom-refs.js';
 
 // 전체 DOM 구조 생성
