@@ -2,10 +2,10 @@ import { initializeAppData } from './core/state.js';
 import { createDOMStructure } from './core/dom.js';
 import { initializeEvents } from './core/events.js';
 import {
-  onUpdateSelectOptions,
-  handleCalculateCartStuff,
-  doUpdatePricesInCart,
-} from './components/CartUpdater.js';
+  updateSelectOptions,
+  calculateCartStuff,
+  updatePricesInCart,
+} from './controllers/CartController.js';
 import {
   getProducts,
   getLastSelectedProductId,
@@ -24,8 +24,8 @@ function main() {
   createDOMStructure();
 
   // ---------------- 초기 UI 업데이트 ----------------
-  onUpdateSelectOptions(); // 상품 목록
-  handleCalculateCartStuff(); // 장바구니 계산
+  updateSelectOptions(); // 상품 목록
+  calculateCartStuff(); // 장바구니 계산
 
   // ---------------- 이벤트 핸들러 초기화 ----------------
   initializeEvents();
@@ -33,13 +33,13 @@ function main() {
   // ---------------- 이벤트 시스템 시작 ----------------
   // 번개세일
   startLightningSaleSystem(getProducts, () => {
-    onUpdateSelectOptions();
-    doUpdatePricesInCart();
+    updateSelectOptions();
+    updatePricesInCart();
   });
   // 추천할인
   startSuggestSaleSystem(getProducts, getLastSelectedProductId, () => {
-    onUpdateSelectOptions();
-    doUpdatePricesInCart();
+    updateSelectOptions();
+    updatePricesInCart();
   });
 }
 

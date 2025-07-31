@@ -9,14 +9,43 @@ import {
   getCartDisplayElement,
 } from './dom-refs.js';
 import {
-  handleCalculateCartStuff,
-  onUpdateSelectOptions,
-} from '../components/CartUpdater.js';
+  calculateCartStuff,
+  updateSelectOptions,
+} from '../controllers/CartController.js';
 
 // ==================== 이벤트 핸들러 초기화 ====================
 export function initializeEvents() {
   setupAddButtonHandler();
   setupCartClickHandler();
+}
+
+/**
+ * 헬프 매뉴얼 이벤트 핸들러 설정
+ * @param {HTMLElement} helpToggle - 토글 버튼
+ * @param {HTMLElement} helpOverlay - 오버레이
+ * @param {HTMLElement} helpColumn - 매뉴얼 컬럼
+ */
+export function setupHelpManualEvents(helpToggle, helpOverlay, helpColumn) {
+  // 토글 버튼 클릭
+  helpToggle.onclick = function () {
+    helpOverlay.classList.toggle('hidden');
+    helpColumn.classList.toggle('translate-x-full');
+  };
+
+  // 오버레이 클릭 (외부 영역)
+  helpOverlay.onclick = function (e) {
+    if (e.target === helpOverlay) {
+      helpOverlay.classList.add('hidden');
+      helpColumn.classList.add('translate-x-full');
+    }
+  };
+
+  // 닫기 버튼 클릭
+  const closeButton = helpColumn.querySelector('button');
+  closeButton.onclick = function () {
+    helpOverlay.classList.add('hidden');
+    helpColumn.classList.add('translate-x-full');
+  };
 }
 
 // ==================== 장바구니 추가 버튼 이벤트 핸들러 ====================
@@ -76,7 +105,7 @@ function setupAddButtonHandler() {
     }
 
     // UI 업데이트 및 마지막 선택 저장
-    handleCalculateCartStuff();
+    calculateCartStuff();
     setLastSelectedProductId(selItem);
   });
 }
@@ -102,8 +131,8 @@ function setupCartClickHandler() {
       if (newQty <= 0) {
         product.stock += currentQty;
         itemElem.remove();
-        handleCalculateCartStuff();
-        onUpdateSelectOptions();
+        calculateCartStuff();
+        updateSelectOptions();
         return;
       }
 
@@ -114,8 +143,8 @@ function setupCartClickHandler() {
 
       qtyElem.textContent = newQty;
       product.stock -= qtyChange;
-      handleCalculateCartStuff();
-      onUpdateSelectOptions();
+      calculateCartStuff();
+      updateSelectOptions();
       return;
     }
 
@@ -125,8 +154,8 @@ function setupCartClickHandler() {
       const remQty = parseInt(qtyElem.textContent);
       product.stock += remQty;
       itemElem.remove();
-      handleCalculateCartStuff();
-      onUpdateSelectOptions();
+      calculateCartStuff();
+      updateSelectOptions();
       return;
     }
 
@@ -135,7 +164,7 @@ function setupCartClickHandler() {
     // }
 
     // UI 업데이트
-    handleCalculateCartStuff();
-    onUpdateSelectOptions();
+    calculateCartStuff();
+    updateSelectOptions();
   });
 }
