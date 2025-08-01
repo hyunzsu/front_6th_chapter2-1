@@ -48,7 +48,6 @@ export function shoppingReducer(state: AppState, action: AppAction): AppState {
         ...state,
         cartItems: newCartItems,
         products: newProducts,
-        selectedProductId: '', // 선택 초기화
       });
     }
 
@@ -72,7 +71,8 @@ export function shoppingReducer(state: AppState, action: AppAction): AppState {
 
       // 재고 체크
       if (quantityDiff > 0 && product.stock < quantityDiff) {
-        return state; // 재고 부족
+        alert('재고가 부족합니다.');
+        return state;
       }
 
       const newCartItems = state.cartItems.map((item) =>
@@ -202,7 +202,7 @@ function recalculateState(state: AppState): AppState {
   }
 
   const cartResult = calculateCart(state.cartItems, getProductById);
-  
+
   // 포인트 계산
   const pointsResult = calculateTotalPoints(
     cartResult.finalAmount,
