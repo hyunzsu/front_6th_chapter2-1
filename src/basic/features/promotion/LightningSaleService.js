@@ -65,7 +65,7 @@ export function startLightningSaleSystem(getProducts, updateCallback) {
 
     if (targetProduct) {
       const saleInfo = applyLightningSale(targetProduct);
-      console.log(saleInfo.message);
+      alert(saleInfo.message);
       updateCallback();
 
       // 일정 시간 후 세일 해제

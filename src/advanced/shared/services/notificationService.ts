@@ -20,7 +20,7 @@ export const defaultNotificationService: NotificationService = {
   },
 
   showInfo: (message: string) => {
-    console.log(message);
+    alert(message);
   },
 };
 

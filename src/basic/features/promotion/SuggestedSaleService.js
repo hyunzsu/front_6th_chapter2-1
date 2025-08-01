@@ -79,7 +79,7 @@ export function startSuggestedSaleSystem(
 
     if (targetProduct) {
       const saleInfo = applySuggestedSale(targetProduct);
-      console.log(saleInfo.message);
+      alert(saleInfo.message);
       updateCallback();
 
       // 일정 시간 후 추천할인 해제

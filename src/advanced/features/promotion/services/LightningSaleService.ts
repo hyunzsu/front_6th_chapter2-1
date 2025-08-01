@@ -52,7 +52,7 @@ export function createLightningSaleManager(
       currentSaleProductId = target.id;
 
       const saleInfo = applyLightningSale(target);
-      console.log(saleInfo.message);
+      alert(saleInfo.message);
     }
 
     onUpdate?.();

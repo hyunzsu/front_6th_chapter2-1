@@ -59,7 +59,7 @@ export function createSuggestedSaleManager(
       currentSaleProductId = target.id;
 
       const saleInfo = applySuggestedSale(target);
-      console.log(saleInfo.message);
+      alert(saleInfo.message);
     }
 
     onUpdate?.();
