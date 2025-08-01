@@ -32,59 +32,59 @@ export function removeSuggestedSale(product: Product) {
   };
 }
 
-export class SuggestedSaleManager {
-  private intervalId: NodeJS.Timeout | null = null;
-  private currentSaleProductId: string | null = null;
+export function createSuggestedSaleManager(
+  getProducts: () => Product[],
+  getLastSelectedProductId: () => string | null,
+  onApplySale: (productId: string) => void,
+  onRemoveSale: (productId: string) => void,
+  onUpdate?: () => void
+) {
+  let intervalId: NodeJS.Timeout | null = null;
+  let currentSaleProductId: string | null = null;
 
-  constructor(
-    private getProducts: () => Product[],
-    private getLastSelectedProductId: () => string | null,
-    private onApplySale: (productId: string) => void,
-    private onRemoveSale: (productId: string) => void,
-    private onUpdate?: () => void
-  ) {}
-
-  start() {
-    if (this.intervalId) return;
-
-    this.intervalId = setInterval(() => {
-      this.runSuggestedSaleCycle();
-    }, TIMER_DELAYS.SUGGEST.INTERVAL);
-  }
-
-  stop() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-
-    if (this.currentSaleProductId) {
-      this.onRemoveSale(this.currentSaleProductId);
-      this.currentSaleProductId = null;
-      this.onUpdate?.();
-    }
-  }
-
-  private runSuggestedSaleCycle() {
+  const runSuggestedSaleCycle = () => {
     // 기존 세일 해제
-    if (this.currentSaleProductId) {
-      this.onRemoveSale(this.currentSaleProductId);
-      this.currentSaleProductId = null;
+    if (currentSaleProductId) {
+      onRemoveSale(currentSaleProductId);
+      currentSaleProductId = null;
     }
 
     // 새로운 추천 세일 적용
-    const products = this.getProducts();
-    const lastSelectedId = this.getLastSelectedProductId();
+    const products = getProducts();
+    const lastSelectedId = getLastSelectedProductId();
     const target = findSuggestedSaleTarget(products, lastSelectedId);
 
     if (target) {
-      this.onApplySale(target.id);
-      this.currentSaleProductId = target.id;
+      onApplySale(target.id);
+      currentSaleProductId = target.id;
 
       const saleInfo = applySuggestedSale(target);
       console.log(saleInfo.message);
     }
 
-    this.onUpdate?.();
-  }
+    onUpdate?.();
+  };
+
+  const start = () => {
+    if (intervalId) return;
+
+    intervalId = setInterval(() => {
+      runSuggestedSaleCycle();
+    }, TIMER_DELAYS.SUGGEST.INTERVAL);
+  };
+
+  const stop = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+
+    if (currentSaleProductId) {
+      onRemoveSale(currentSaleProductId);
+      currentSaleProductId = null;
+      onUpdate?.();
+    }
+  };
+
+  return { start, stop };
 }

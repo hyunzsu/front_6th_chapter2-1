@@ -27,57 +27,57 @@ export function removeLightningSale(product: Product) {
   };
 }
 
-export class LightningSaleManager {
-  private intervalId: NodeJS.Timeout | null = null;
-  private currentSaleProductId: string | null = null;
+export function createLightningSaleManager(
+  getProducts: () => Product[],
+  onApplySale: (productId: string) => void,
+  onRemoveSale: (productId: string) => void,
+  onUpdate?: () => void
+) {
+  let intervalId: NodeJS.Timeout | null = null;
+  let currentSaleProductId: string | null = null;
 
-  constructor(
-    private getProducts: () => Product[],
-    private onApplySale: (productId: string) => void,
-    private onRemoveSale: (productId: string) => void,
-    private onUpdate?: () => void
-  ) {}
-
-  start() {
-    if (this.intervalId) return;
-
-    this.intervalId = setInterval(() => {
-      this.runLightningSaleCycle();
-    }, TIMER_DELAYS.LIGHTNING.INTERVAL);
-  }
-
-  stop() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-
-    if (this.currentSaleProductId) {
-      this.onRemoveSale(this.currentSaleProductId);
-      this.currentSaleProductId = null;
-      this.onUpdate?.();
-    }
-  }
-
-  private runLightningSaleCycle() {
+  const runLightningSaleCycle = () => {
     // 기존 세일 해제
-    if (this.currentSaleProductId) {
-      this.onRemoveSale(this.currentSaleProductId);
-      this.currentSaleProductId = null;
+    if (currentSaleProductId) {
+      onRemoveSale(currentSaleProductId);
+      currentSaleProductId = null;
     }
 
     // 새로운 세일 적용
-    const products = this.getProducts();
+    const products = getProducts();
     const target = findLightningSaleTarget(products);
 
     if (target) {
-      this.onApplySale(target.id);
-      this.currentSaleProductId = target.id;
+      onApplySale(target.id);
+      currentSaleProductId = target.id;
 
       const saleInfo = applyLightningSale(target);
       console.log(saleInfo.message);
     }
 
-    this.onUpdate?.();
-  }
+    onUpdate?.();
+  };
+
+  const start = () => {
+    if (intervalId) return;
+
+    intervalId = setInterval(() => {
+      runLightningSaleCycle();
+    }, TIMER_DELAYS.LIGHTNING.INTERVAL);
+  };
+
+  const stop = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+
+    if (currentSaleProductId) {
+      onRemoveSale(currentSaleProductId);
+      currentSaleProductId = null;
+      onUpdate?.();
+    }
+  };
+
+  return { start, stop };
 }

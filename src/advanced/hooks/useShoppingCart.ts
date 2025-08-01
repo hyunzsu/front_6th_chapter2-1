@@ -2,16 +2,22 @@ import { useReducer, useCallback, useEffect, useRef } from 'react';
 import { shoppingReducer } from '../shared/core/reducer';
 import { initialState } from '../shared/core/initialState';
 import * as actions from '../shared/core/actions';
-import { LightningSaleManager } from '../features/promotion/services/LightningSaleService';
-import { SuggestedSaleManager } from '../features/promotion/services/SuggestedSaleService';
+import { createLightningSaleManager } from '../features/promotion/services/LightningSaleService';
+import { createSuggestedSaleManager } from '../features/promotion/services/SuggestedSaleService';
 import type { Product } from '../shared/types';
 
 export function useShoppingCart() {
   const [state, dispatch] = useReducer(shoppingReducer, initialState);
 
   // 프로모션 매니저 참조
-  const lightningSaleManager = useRef<LightningSaleManager | null>(null);
-  const suggestedSaleManager = useRef<SuggestedSaleManager | null>(null);
+  const lightningSaleManager = useRef<{
+    start: () => void;
+    stop: () => void;
+  } | null>(null);
+  const suggestedSaleManager = useRef<{
+    start: () => void;
+    stop: () => void;
+  } | null>(null);
 
   const shopActions = {
     selectProduct: useCallback((productId: string) => {
@@ -57,7 +63,7 @@ export function useShoppingCart() {
   // 프로모션 시스템 초기화 및 정리
   useEffect(() => {
     // 번개세일 매니저 초기화
-    lightningSaleManager.current = new LightningSaleManager(
+    lightningSaleManager.current = createLightningSaleManager(
       () => state.products,
       (productId) => dispatch(actions.applyLightningSale(productId)),
       (productId) => dispatch(actions.resetPromotions(productId)),
@@ -65,7 +71,7 @@ export function useShoppingCart() {
     );
 
     // 추천세일 매니저 초기화
-    suggestedSaleManager.current = new SuggestedSaleManager(
+    suggestedSaleManager.current = createSuggestedSaleManager(
       () => state.products,
       () => state.lastSelectedProductId,
       (productId) => dispatch(actions.applySuggestedSale(productId)),
