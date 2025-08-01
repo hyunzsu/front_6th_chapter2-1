@@ -48,6 +48,7 @@ function App() {
           totalAmount={state.totalAmount}
           subtotal={state.subtotal}
           bonusPoints={state.bonusPoints}
+          pointsDetails={state.pointsDetails || []}
           discountInfo={state.discountInfo}
           isTuesdaySpecial={state.isTuesdaySpecial}
           cartItems={state.cartItems}

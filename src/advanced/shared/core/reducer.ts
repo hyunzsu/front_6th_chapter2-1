@@ -18,6 +18,7 @@ export function shoppingReducer(state: AppState, action: AppAction): AppState {
       const product = state.products.find((p) => p.id === productId);
 
       if (!product || product.stock === 0) {
+        alert('재고가 부족합니다.');
         return state;
       }
 
@@ -28,7 +29,13 @@ export function shoppingReducer(state: AppState, action: AppAction): AppState {
 
       let newCartItems;
       if (existingItemIndex >= 0) {
-        // 수량 증가
+        // 기존 아이템 수량 증가 시 재고 확인
+        const currentItem = state.cartItems[existingItemIndex];
+        if (product.stock < 1) {
+          alert('재고가 부족합니다.');
+          return state;
+        }
+
         newCartItems = state.cartItems.map((item, index) =>
           index === existingItemIndex
             ? { ...item, quantity: item.quantity + 1 }
@@ -198,6 +205,7 @@ function recalculateState(state: AppState): AppState {
       bonusPoints: 0,
       discountInfo: [],
       isTuesdaySpecial: false,
+      pointsDetails: [],
     };
   }
 
@@ -219,5 +227,6 @@ function recalculateState(state: AppState): AppState {
     discountInfo: cartResult.individualDiscountInfo,
     isTuesdaySpecial: cartResult.isTuesdayToday,
     bonusPoints: pointsResult.finalPoints,
+    pointsDetails: pointsResult.pointsDetails || [],
   };
 }

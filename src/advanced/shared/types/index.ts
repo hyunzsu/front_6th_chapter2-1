@@ -51,6 +51,7 @@ export interface AppState {
   lastSelectedProductId: string | null;
   discountInfo: DiscountInfo[];
   isTuesdaySpecial: boolean;
+  pointsDetails?: string[];
 }
 
 export type AppAction =

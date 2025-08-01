@@ -5,6 +5,7 @@ interface OrderSummaryProps {
   totalAmount: number;
   subtotal: number;
   bonusPoints: number;
+  pointsDetails?: string[];
   discountInfo: DiscountInfo[];
   isTuesdaySpecial: boolean;
   cartItems: CartItem[];
@@ -16,12 +17,19 @@ export function OrderSummary({
   totalAmount,
   subtotal,
   bonusPoints,
+  pointsDetails = [],
   discountInfo,
   isTuesdaySpecial,
   cartItems,
   totalQuantity,
   getProductById,
 }: OrderSummaryProps) {
+  // 총 할인율 계산
+  const getTotalDiscountRate = (): number => {
+    if (subtotal === 0) return 0;
+    return ((subtotal - totalAmount) / subtotal) * 100;
+  };
+
   const renderSummaryDetails = () => {
     if (!cartItems || cartItems.length === 0 || subtotal === 0) {
       return null;
@@ -68,7 +76,9 @@ export function OrderSummary({
               className="flex justify-between text-sm tracking-wide text-green-400"
             >
               <span className="text-xs">{info.name} (10개↑)</span>
-              <span className="text-xs">-{info.discountPercent.toFixed(1)}%</span>
+              <span className="text-xs">
+                -{info.discountPercent.toFixed(1)}%
+              </span>
             </div>
           ))
         )}
@@ -90,6 +100,34 @@ export function OrderSummary({
     );
   };
 
+  // 할인 정보 렌더링 함수
+  const renderDiscountInfo = () => {
+    const totalDiscountRate = getTotalDiscountRate();
+
+    if (totalDiscountRate === 0) {
+      return null;
+    }
+
+    return (
+      <div id="discount-info" className="mb-4">
+        <div className="bg-green-500/20 rounded-lg p-3">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs uppercase tracking-wide text-green-400">
+              총 할인율
+            </span>
+            <span className="text-sm font-medium text-green-400">
+              {totalDiscountRate.toFixed(1)}%
+            </span>
+          </div>
+          <div className="text-2xs text-gray-300">
+            ₩{Math.round(subtotal - totalAmount).toLocaleString()}{' '}
+            할인되었습니다
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <section className="bg-black text-white p-8 flex flex-col">
       <h2 className="text-xs font-medium mb-5 tracking-extra-wide uppercase">
@@ -100,6 +138,9 @@ export function OrderSummary({
         <div id="summary-details">{renderSummaryDetails()}</div>
 
         <div className="mt-auto">
+          {/* 할인 정보 */}
+          {renderDiscountInfo()}
+
           <div id="cart-total" className="pt-5 border-t border-white/10">
             <div className="flex justify-between items-baseline">
               <span className="text-sm uppercase tracking-wider">Total</span>
@@ -111,7 +152,14 @@ export function OrderSummary({
               id="loyalty-points"
               className="text-xs text-blue-400 mt-2 text-right"
             >
-              적립 포인트: {bonusPoints}p
+              <div>적립 포인트: {bonusPoints}p</div>
+              {pointsDetails &&
+                Array.isArray(pointsDetails) &&
+                pointsDetails.length > 0 && (
+                  <div className="text-2xs opacity-70 mt-1">
+                    {pointsDetails.join(', ')}
+                  </div>
+                )}
             </div>
           </div>
 

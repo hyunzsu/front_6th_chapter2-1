@@ -16,19 +16,23 @@ export function StockInfo({ products }: StockInfoProps) {
       (product) => product.stock === 0
     );
 
-    if (outOfStockProducts.length > 0) {
-      const productNames = outOfStockProducts.map((p) => p.name).join(', ');
-      return `⚠️ 품절: ${productNames}`;
-    }
+    const messages: string[] = [];
 
+    // 재고 부족 상품
     if (lowStockProducts.length > 0) {
-      const productNames = lowStockProducts
-        .map((p) => `${p.name}(${p.stock}개)`)
-        .join(', ');
-      return `⚠️ 재고부족: ${productNames}`;
+      lowStockProducts.forEach((product) => {
+        messages.push(`${product.name}: 재고 부족 (${product.stock}개 남음)`);
+      });
     }
 
-    return '';
+    // 품절 상품
+    if (outOfStockProducts.length > 0) {
+      outOfStockProducts.forEach((product) => {
+        messages.push(`${product.name}: 품절`);
+      });
+    }
+
+    return messages.join('\n');
   };
 
   const stockMessage = getStockMessage();
