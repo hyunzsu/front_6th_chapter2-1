@@ -1,3 +1,1 @@
-export * from './actions';
-export * from './reducer';
-export * from './initialState';
+export * from './combinedReducer';

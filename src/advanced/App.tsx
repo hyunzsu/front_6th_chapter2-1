@@ -12,7 +12,7 @@ import {
   StockInfo,
 } from './features/product/components';
 import { CartContainer, OrderSummary } from './features/cart/components';
-import { useShoppingCart } from './hooks/useShoppingCart';
+import { useShoppingCart } from './shared/hooks/useShoppingCart';
 
 function App() {
   const { state, actions, getProductById } = useShoppingCart();

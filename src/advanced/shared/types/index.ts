@@ -1,80 +1,27 @@
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice: number;
-  stock: number;
-  isOnSale: boolean;
-  isSuggestedSale: boolean;
-}
+/**
+ * 통합 타입 정의 파일
+ * 모든 도메인의 타입들을 재export하여 중앙 집중식 접근 제공
+ */
 
-export interface CartItem {
-  id: string;
-  quantity: number;
-}
+// ===== 기본 엔티티 =====
+export * from './entities';
 
-export interface CartSummary {
-  subtotal: number;
-  totalQuantity: number;
-  discountedTotal: number;
-  individualDiscountInfo: DiscountInfo[];
-}
+// ===== 계산 관련 =====  
+export * from './calculations';
 
-export interface DiscountInfo {
-  name: string;
-  discountPercent: number;
-}
+// ===== Hook 관련 =====
+export * from './hooks';
 
-export interface CartCalculation {
-  subtotal: number;
-  finalAmount: number;
-  totalQuantity: number;
-  totalDiscountRate: number;
-  isTuesdayToday: boolean;
-  individualDiscountInfo: DiscountInfo[];
-}
+// ===== 레거시 (하위 호환성) =====
+export * from './legacy';
 
-export interface BulkDiscountResult {
-  finalAmount: number;
-  totalDiscountRate: number;
-  isTuesdayToday: boolean;
-}
+// ===== 도메인별 상태 타입 (재export) =====
+export type { RootState, RootAction } from '../core/combinedReducer';
+export type { CartState } from '../../features/cart/model/reducer';
+export type { ProductState } from '../../features/product/model/reducer';
+export type { PromotionState } from '../../features/promotion/model/reducer';
 
-export interface AppState {
-  products: Product[];
-  cartItems: CartItem[];
-  selectedProductId: string;
-  bonusPoints: number;
-  itemCount: number;
-  totalAmount: number;
-  subtotal: number;
-  lastSelectedProductId: string | null;
-  discountInfo: DiscountInfo[];
-  isTuesdaySpecial: boolean;
-  pointsDetails?: string[];
-}
-
-export type AppAction =
-  | { type: 'SELECT_PRODUCT'; payload: string }
-  | { type: 'ADD_TO_CART'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
-  | { type: 'REMOVE_FROM_CART'; payload: string }
-  | { type: 'APPLY_LIGHTNING_SALE'; payload: string }
-  | { type: 'APPLY_SUGGESTED_SALE'; payload: string }
-  | { type: 'RESET_PROMOTIONS'; payload: string }
-  | { type: 'CALCULATE_TOTALS' };
-
-export interface StockStatus {
-  isLow: boolean;
-  isWarning: boolean;
-  message: string;
-}
-
-export interface PromotionService {
-  startService: (
-    getProducts: () => Product[],
-    getLastSelectedProductId?: () => string | null,
-    onUpdate?: () => void
-  ) => void;
-  stopService: () => void;
-}
+// ===== 도메인별 액션 타입 (재export) =====
+export type { CartAction } from '../../features/cart/model/actions';
+export type { ProductAction } from '../../features/product/model/actions';
+export type { PromotionAction } from '../../features/promotion/model/actions';
